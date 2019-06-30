@@ -28,7 +28,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     return when {
         diffTime > 360 * TimeUnits.DAY.mills -> "более чем через год"
         diffTime < -360 * TimeUnits.DAY.mills -> "более года назад"
-        diffTime in 0..1 * TimeUnits.SECOND.mills -> "только что"
+        diffTime.absoluteValue in 0..1 * TimeUnits.SECOND.mills -> "только что"
         else -> {
             val humanizeTime = when (diffTime.absoluteValue) {
                 in 1 * TimeUnits.SECOND.mills..45 * TimeUnits.SECOND.mills -> "несколько секунд"
