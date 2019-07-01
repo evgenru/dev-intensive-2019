@@ -1,0 +1,57 @@
+/*
+ * Copyright 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package androidx.recyclerview.widget;
+
+import android.content.Context;
+import android.graphics.Rect;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+
+import java.util.Arrays;
+
+/**
+ * A {@link RecyclerView.LayoutManager} implementations that lays out items in a grid.
+ * <p>
+ * By default, each item occupies 1 span. You can change it by providing a custom
+ * {@link SpanSizeLookup} instance via {@link #setSpanSizeLookup(SpanSizeLookup)}.
+ */
+public class GridLayoutManager extends LinearLayoutManager {
+
+    private static final boolean DEBUG = false;
+    private static final String TAG = "GridLayoutManager";
+    public static final int DEFAULT_SPAN_COUNT = -1;
+    /**
+     * Span size have been changed but we've not done a new layout calculation.
+     */
+    boolean mPendingSpanCountChange = false;
+    int mSpanCount = DEFAULT_SPAN_COUNT;
+    /**
+     * Right borders for each span.
+     * <p>For <b>i-th</b> item start is {@link #mCachedBorders}[i-1] + 1
+     * and end is {@link #mCachedBorders}[i].
+     */
+    int [] mCachedBorders;
+    /**
+     * Temporary array to keep views in layoutChunk method
+     */
+    View[] mSet;
+    final SparseIntArray mPreLayoutSpanSizeCache = new SparseIntArray();
+    final SparseIntArray mPreLayoutSpanIndexCache = new Spar

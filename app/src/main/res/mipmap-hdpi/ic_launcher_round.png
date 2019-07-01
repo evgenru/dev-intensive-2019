@@ -1,0 +1,143 @@
+/*
+ * Copyright 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package androidx.recyclerview.widget;
+
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
+
+import android.content.Context;
+import android.graphics.PointF;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
+import androidx.core.os.TraceCompat;
+import androidx.core.view.ViewCompat;
+
+import java.util.List;
+
+/**
+ * A {@link RecyclerView.LayoutManager} implementation which provides
+ * similar functionality to {@link android.widget.ListView}.
+ */
+public class LinearLayoutManager extends RecyclerView.LayoutManager implements
+        ItemTouchHelper.ViewDropHandler, RecyclerView.SmoothScroller.ScrollVectorProvider {
+
+    private static final String TAG = "LinearLayoutManager";
+
+    static final boolean DEBUG = false;
+
+    public static final int HORIZONTAL = RecyclerView.HORIZONTAL;
+
+    public static final int VERTICAL = RecyclerView.VERTICAL;
+
+    public static final int INVALID_OFFSET = Integer.MIN_VALUE;
+
+
+    /**
+     * While trying to find next view to focus, LayoutManager will not try to scroll more
+     * than this factor times the total space of the list. If layout is vertical, total space is the
+     * height minus padding, if layout is horizontal, total space is the width minus padding.
+     */
+    private static final float MAX_SCROLL_FACTOR = 1 / 3f;
+
+    /**
+     * Current orientation. Either {@link #HORIZONTAL} or {@link #VERTICAL}
+     */
+    @RecyclerView.Orientation
+    int mOrientation = RecyclerView.DEFAULT_ORIENTATION;
+
+    /**
+     * Helper class that keeps temporary layout state.
+     * It does not keep state after layout is complete but we still keep a reference to re-use
+     * the same object.
+     */
+    private LayoutState mLayoutState;
+
+    /**
+     * Many calculations are made depending on orientation. To keep it clean, this interface
+     * helps {@link LinearLayoutManager} make those decisions.
+     */
+    OrientationHelper mOrientationHelper;
+
+    /**
+     * We need to track this so that we can ignore current position when it changes.
+     */
+    private boolean mLastStackFromEnd;
+
+
+    /**
+     * Defines if layout should be calculated from end to start.
+     *
+     * @see #mShouldReverseLayout
+     */
+    private boolean mReverseLayout = false;
+
+    /**
+     * This keeps the final value for how LayoutManager should start laying out views.
+     * It is calculated by checking {@link #getReverseLayout()} and View's layout direction.
+     * {@link #onLayoutChildren(RecyclerView.Recycler, RecyclerView.State)} is run.
+     */
+    boolean mShouldReverseLayout = false;
+
+    /**
+     * Works the same way as {@link android.widget.AbsListView#setStackFromBottom(boolean)} and
+     * it supports both orientations.
+     * see {@link android.widget.AbsListView#setStackFromBottom(boolean)}
+     */
+    private boolean mStackFromEnd = false;
+
+    /**
+     * Works the same way as {@link android.widget.AbsListView#setSmoothScrollbarEnabled(boolean)}.
+     * see {@link android.widget.AbsListView#setSmoothScrollbarEnabled(boolean)}
+     */
+    private boolean mSmoothScrollbarEnabled = true;
+
+    /**
+     * When LayoutManager needs to scroll to a position, it sets this variable and requests a
+     * layout which will check this variable and re-layout accordingly.
+     */
+    int mPendingScrollPosition = RecyclerView.NO_POSITION;
+
+    /**
+     * Used to keep the offset value when {@link #scrollToPositionWithOffset(int, int)} is
+     * called.
+     */
+    int mPendingScrollPositionOffset = INVALID_OFFSET;
+
+    private boolean mRecycleChildrenOnDetach;
+
+    SavedState mPendingSavedState = null;
+
+    /**
+     *  Re-used variable to keep anchor information on re-layout.
+     *  Anchor position and coordinate defines the reference point for LLM while doing a layout.
+     * */
+    final AnchorInfo mAnchorInfo = new AnchorInfo();
+
+    /**
+     * Stashed to avoid allocation, currently only used in #fill()
+     */
+    private final LayoutChunkResult mLayoutChunkResult = new LayoutChunkResult();
+
+    /**
+     * Number of items to prefetch when first coming
