@@ -21,13 +21,13 @@ abstract class BaseMessage(
             chat: Chat,
             date: Date = Date(),
             type: String = "text",
-            isIncoming: Boolean = false,
-            payload: Any? = null
+            payload: Any? = null,
+            isIncoming: Boolean = false
         ): BaseMessage {
             lastId++
             return when (type) {
-                "image" -> ImageMessage("$lastId", from, chat, date = date, image = payload as String, isIncoming = isIncoming)
-                else -> TextMessage("$lastId", from, chat, date = date, text = payload as String, isIncoming = isIncoming)
+                "image" -> ImageMessage("$lastId", from, chat, date, payload as String, isIncoming = isIncoming)
+                else -> TextMessage("$lastId", from, chat, date, payload as String, isIncoming = isIncoming)
             }
         }
     }
