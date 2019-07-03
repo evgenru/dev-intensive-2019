@@ -6,7 +6,7 @@ package ru.skillbranch.devintensive.extensions
 
 fun String.truncate(length: Int = 16) =
     if (this.trimEnd().length > length)
-        this.take(length).trimEnd().plus("...")
+        this.take(length+1).trimEnd().plus("...")
     else
         this.trimEnd()
 
