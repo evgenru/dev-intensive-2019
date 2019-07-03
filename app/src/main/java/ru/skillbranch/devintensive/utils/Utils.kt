@@ -1,8 +1,5 @@
 package ru.skillbranch.devintensive.utils
 
-/**
- * Created by evgen.ru79@gmail.com on 27.06.2019.
- */
 object Utils {
     fun parseFullName(fullName: String?): Pair<String?, String?> {
         val parts = fullName?.trim()?.ifEmpty { null }?.split("\\s+".toRegex())

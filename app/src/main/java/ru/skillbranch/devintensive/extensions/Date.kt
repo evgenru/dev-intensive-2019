@@ -17,35 +17,35 @@ enum class TimeUnits(val mills: Long) {
     SECOND(1000L),
     MINUTE(60 * SECOND.mills),
     HOUR(60 * MINUTE.mills),
-    DAY(24 * HOUR.mills)
-}
+    DAY(24 * HOUR.mills);
 
-fun TimeUnits.plural(value: Int) =
-    "$value ${when (this) {
-        TimeUnits.SECOND -> getDeclensions(value, "секунд", "секунд", "секунду", "секунды", "секунд")
-        TimeUnits.MINUTE -> getDeclensions(value, "минут", "минут", "минуту", "минуты", "минут")
-        TimeUnits.HOUR -> getDeclensions(value, "часов", "часов", "час", "часа", "часов")
-        TimeUnits.DAY -> getDeclensions(value, "дней", "дней", "день", "дня", "дней")
-    }}"
+    fun plural(value: Int) =
+        "$value ${when (this) {
+            SECOND -> getDeclensions(value, "секунд", "секунд", "секунду", "секунды", "секунд")
+            MINUTE -> getDeclensions(value, "минут", "минут", "минуту", "минуты", "минут")
+            HOUR -> getDeclensions(value, "часов", "часов", "час", "часа", "часов")
+            DAY -> getDeclensions(value, "дней", "дней", "день", "дня", "дней")
+        }}"
 
-
-private fun getDeclensions(
-    value: Int,
-    unitNameThs: String,
-    unitName0: String,
-    unitName1: String,
-    unitName234: String,
-    unitName: String
-) =
-    when (value) {
-        in 11..19 -> unitNameThs
-        else -> when (value.rem(10)) {
-            0 -> unitName0
-            1 -> unitName1
-            in 2..4 -> unitName234
-            else -> unitName
+    private fun getDeclensions(
+        value: Int,
+        unitNameThs: String,
+        unitName0: String,
+        unitName1: String,
+        unitName234: String,
+        unitName: String
+    ) =
+        when (value) {
+            in 11..19 -> unitNameThs
+            else -> when (value.rem(10)) {
+                0 -> unitName0
+                1 -> unitName1
+                in 2..4 -> unitName234
+                else -> unitName
+            }
         }
-    }
+
+}
 
 
 fun Date.humanizeDiff(date: Date = Date()): String {
