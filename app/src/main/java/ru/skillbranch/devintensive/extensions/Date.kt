@@ -20,6 +20,33 @@ enum class TimeUnits(val mills: Long) {
     DAY(24 * HOUR.mills)
 }
 
+fun TimeUnits.plural(value: Int) =
+    "$value ${when (this) {
+        TimeUnits.SECOND -> getDeclensions(value, "секунд", "секунд", "секунду", "секунды", "секунд")
+        TimeUnits.MINUTE -> getDeclensions(value, "минут", "минут", "минуту", "минуты", "минут")
+        TimeUnits.HOUR -> getDeclensions(value, "часов", "часов", "час", "часа", "часов")
+        TimeUnits.DAY -> getDeclensions(value, "дней", "дней", "день", "дня", "дней")
+    }}"
+
+
+private fun getDeclensions(
+    value: Int,
+    unitNameThs: String,
+    unitName0: String,
+    unitName1: String,
+    unitName234: String,
+    unitName: String
+) =
+    when (value) {
+        in 11..19 -> unitNameThs
+        else -> when (value.rem(10)) {
+            0 -> unitName0
+            1 -> unitName1
+            in 2..4 -> unitName234
+            else -> unitName
+        }
+    }
+
 
 fun Date.humanizeDiff(date: Date = Date()): String {
 
@@ -34,42 +61,15 @@ fun Date.humanizeDiff(date: Date = Date()): String {
                 in 1 * TimeUnits.SECOND.mills..45 * TimeUnits.SECOND.mills -> "несколько секунд"
                 in 45 * TimeUnits.SECOND.mills..75 * TimeUnits.SECOND.mills -> "минуту"
                 in 75 * TimeUnits.SECOND.mills..45 * TimeUnits.MINUTE.mills -> {
-                    val minutes = (diffTime.absoluteValue / TimeUnits.MINUTE.mills).toInt()
-                    "$minutes ${when (minutes) {
-                        in 11..19 -> "минут"
-                        else -> when (minutes.rem(10)) {
-                            0 -> "минут"
-                            1 -> "минуту"
-                            in 2..4 -> "минуты"
-                            else -> "минут"
-                        }
-                    }}"
+                    TimeUnits.MINUTE.plural((diffTime.absoluteValue / TimeUnits.MINUTE.mills).toInt())
                 }
                 in 45 * TimeUnits.MINUTE.mills..75 * TimeUnits.MINUTE.mills -> "час"
                 in 75 * TimeUnits.MINUTE.mills..22 * TimeUnits.HOUR.mills -> {
-                    val hours = (diffTime.absoluteValue / TimeUnits.HOUR.mills).toInt()
-                    "$hours ${when (hours) {
-                        in 11..19 -> "часов"
-                        else -> when (hours.rem(10)) {
-                            0 -> "часов"
-                            1 -> "час"
-                            in 2..4 -> "часа"
-                            else -> "часов"
-                        }
-                    }}"
+                    TimeUnits.HOUR.plural((diffTime.absoluteValue / TimeUnits.HOUR.mills).toInt())
                 }
                 in 22 * TimeUnits.HOUR.mills..26 * TimeUnits.HOUR.mills -> "день"
                 in 26 * TimeUnits.HOUR.mills..360 * TimeUnits.DAY.mills -> {
-                    val days = (diffTime.absoluteValue / TimeUnits.DAY.mills).toInt()
-                    "$days ${when (days) {
-                        in 11..19 -> "дней"
-                        else -> when (days.rem(10)) {
-                            0 -> "дней"
-                            1 -> "день"
-                            in 2..4 -> "дня"
-                            else -> "дней"
-                        }
-                    }}"
+                    TimeUnits.DAY.plural((diffTime.absoluteValue / TimeUnits.DAY.mills).toInt())
                 }
                 else -> ""
             }
