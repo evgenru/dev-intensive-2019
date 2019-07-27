@@ -1,5 +1,14 @@
 package ru.skillbranch.devintensive.utils
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.toDrawable
+import ru.skillbranch.devintensive.R
+
 object Utils {
     fun parseFullName(fullName: String?): Pair<String?, String?> {
         val parts = fullName?.trim()?.ifEmpty { null }?.split("\\s+".toRegex())
@@ -13,7 +22,7 @@ object Utils {
             .toUpperCase()
             .ifEmpty { null }
 
-    fun transliterationChar(char: Char): String? = when (char) {
+    private fun transliterationChar(char: Char): String? = when (char) {
         'а' -> "a"
         'б' -> "b"
         'в' -> "v"
@@ -60,5 +69,24 @@ object Utils {
         }?.joinToString("")
     }
 
+    fun createAvatar(str: String, context: Context): Drawable {
+        val bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawRect(
+            0f,
+            0f,
+            500f,
+            500f,
+            Paint().apply {
+                color = context.theme.obtainStyledAttributes(listOf(R.attr.colorAccent).toIntArray()).getColor(0, 0)
+            })
+        canvas.drawText(str, 250f, 320f, Paint().apply {
+            color = Color.WHITE
+            textSize = 200f
+            textAlign = Paint.Align.CENTER
+        })
+        canvas.save()
+        return bitmap.toDrawable(context.resources)
+    }
 
 }
