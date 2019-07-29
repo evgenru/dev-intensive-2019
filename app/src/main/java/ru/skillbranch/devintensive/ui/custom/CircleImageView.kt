@@ -81,10 +81,15 @@ class CircleImageView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun getBorderWidth(): Int = mBitmapWidth
+    fun getBorderWidth(): Int = convertPixelsToDp(mBorderWidth)
+
     fun setBorderWidth(@Dimension dp: Int) {
         mBorderWidth = convertDpToPixels(dp.toFloat())
         setup()
+    }
+
+    private fun convertPixelsToDp(pixels: Int): Int {
+        return pixels.div(context.resources.displayMetrics.density).toInt()
     }
 
     fun convertDpToPixels(dp: Float): Int {

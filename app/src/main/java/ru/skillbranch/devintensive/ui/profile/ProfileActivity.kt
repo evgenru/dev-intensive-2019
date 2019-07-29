@@ -136,7 +136,8 @@ class ProfileActivity : AppCompatActivity() {
             background.colorFilter = filter
             setImageDrawable(icon)
         }
-
+        val width = iv_avatar.getBorderWidth()
+        iv_avatar.setBorderWidth(width)
     }
 
     private fun saveProfileInfo() {
