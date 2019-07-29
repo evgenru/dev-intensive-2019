@@ -9,7 +9,7 @@ import ru.skillbranch.devintensive.models.Profile
 /**
  * Created by evgen.ru79@gmail.com on 24.07.2019.
  */
-object PreferenciesRepository {
+object PreferencesRepository {
 
     private const val FIRST_NAME = "FIRST_NAME"
     private const val LAST_NAME = "LAST_NAME"
