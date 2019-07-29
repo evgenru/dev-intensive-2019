@@ -34,7 +34,7 @@ data class Profile(
             if (repositoryString.isEmpty())
                 return true
 
-            if (!repositoryString.toLowerCase().matches("(https://)?(www.)?github.com/[a-z0-9._-]+".toRegex()))
+            if (!repositoryString.toLowerCase().matches("(https://)?(www.)?github.com/[a-z0-9.\\-_]+".toRegex()))
                 return false
             val githubNickname = repositoryString.substring(repositoryString.indexOfLast { it == '/' } + 1)
             val excludes = setOf(
