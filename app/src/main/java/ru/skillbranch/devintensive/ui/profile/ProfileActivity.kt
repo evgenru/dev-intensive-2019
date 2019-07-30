@@ -93,9 +93,10 @@ class ProfileActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
             override fun afterTextChanged(p0: Editable?) {
                 if (Profile.validateRepository(p0.toString())) {
-                    wr_repository.error = null
                     wr_repository.isErrorEnabled = false
+                    wr_repository.error = null
                 } else {
+                    wr_repository.isErrorEnabled = true
                     wr_repository.error = "Невалидный адрес репозитория"
                 }
             }
