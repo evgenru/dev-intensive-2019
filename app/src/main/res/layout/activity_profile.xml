@@ -210,7 +210,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/profile_hint_repository" style="@style/Profile.EditText.Single"
-                    tools:text="http://github.com" android:id="@+id/et_repository"/>
+                    tools:text="http://github.com"
+                    android:imeOptions="flagNoExtractUi"
+                    android:id="@+id/et_repository"/>
         </com.google.android.material.textfield.TextInputLayout>
         <ImageButton
                 android:layout_width="24dp"

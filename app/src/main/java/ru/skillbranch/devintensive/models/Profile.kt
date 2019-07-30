@@ -31,12 +31,13 @@ data class Profile(
 
     companion object {
         fun validateRepository(repositoryString: String): Boolean {
-            if (repositoryString.isBlank())
+            val normalizeUrl = repositoryString.toLowerCase().trim()
+            if (normalizeUrl.isEmpty())
                 return true
 
-            if (!repositoryString.toLowerCase().trim().matches("(https://)?(www.)?github.com/[a-z0-9\\-._]+(/)?".toRegex()))
+            if (!normalizeUrl.matches("(https://|http://)?(www.)?github.com/[a-z0-9]+(\\-[a-z0-9]+)?(/)?".toRegex()))
                 return false
-            val githubNickname = repositoryString.trim().toLowerCase().substring(repositoryString.indexOf("github.com") + 11).dropLastWhile { it == '/' }
+            val githubNickname = normalizeUrl.substring(repositoryString.indexOf("github.com") + 11).dropLastWhile { it == '/' }
             val excludes = setOf(
                 "enterprise",
                 "features",
@@ -52,7 +53,7 @@ data class Profile(
                 "login",
                 "join"
             )
-            return !excludes.contains(githubNickname.toLowerCase())
+            return !excludes.contains(githubNickname)
 
         }
     }
