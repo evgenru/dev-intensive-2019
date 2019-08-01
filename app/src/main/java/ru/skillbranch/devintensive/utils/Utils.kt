@@ -61,7 +61,7 @@ object Utils {
 
 
     fun transliteration(payload: String?, divider: String = " "): String? {
-        return payload?.map {
+        return payload?.trim()?.map {
             when (it) {
                 ' ' -> divider
                 else -> transliterationChar(it) ?: transliterationChar(it.toLowerCase())?.capitalize() ?: it

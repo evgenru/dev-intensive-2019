@@ -31,43 +31,43 @@ data class Profile(
 
     companion object {
         fun validateRepository(repositoryString: String): Boolean {
-            val regexStr = "^(?:https://)?(?:www.)?(?:github.com/)[^/|\\s]+(?<!${getRegexExceptions()})(?:/)?$"
-            val regex = Regex(regexStr)
-
-            return !(repositoryString.isNotEmpty() && !regex.matches(repositoryString))
-
-//            val normalizeUrl = repositoryString.toLowerCase().trim()
-//            if (normalizeUrl.isEmpty())
-//                return true
+//            val regexStr = "^(?:https://)?(?:www.)?(?:github.com/)[^/|\\s]+(?<!${getRegexExceptions()})(?:/)?$"
+//            val regex = Regex(regexStr)
 //
-//            if (!normalizeUrl.matches("(https://)?(www.)?github.com/[a-z0-9\\-._]+(/)?".toRegex()))
-//                return false
-//            val githubNickname = normalizeUrl.substring(repositoryString.indexOf("github.com") + 11).dropLastWhile { it == '/' }
-//            val excludes = setOf(
-//                "enterprise",
-//                "features",
-//                "topics",
-//                "collections",
-//                "trending",
-//                "events",
-//                "marketplace",
-//                "pricing",
-//                "nonprofit",
-//                "customer-stories",
-//                "security",
-//                "login",
-//                "join"
-//            )
-//            return !excludes.contains(githubNickname)
+//            return !(repositoryString.isNotEmpty() && !regex.matches(repositoryString))
 
-        }
+            val normalizeUrl = repositoryString.toLowerCase().trim()
+            if (normalizeUrl.isEmpty())
+                return true
 
-        private fun getRegexExceptions(): String {
-            val exceptions = arrayOf(
-                "enterprise", "features", "topics", "collections", "trending", "events", "marketplace", "pricing",
-                "nonprofit", "customer-stories", "security", "login", "join"
+            if (!normalizeUrl.matches("(https://)?(www.)?github.com/[a-z0-9]+(//-[a-z0-9]+)?(/)?".toRegex()))
+                return false
+            val githubNickname = normalizeUrl.substring(repositoryString.indexOf("github.com") + 11).dropLastWhile { it == '/' }
+            val excludes = setOf(
+                "enterprise",
+                "features",
+                "topics",
+                "collections",
+                "trending",
+                "events",
+                "marketplace",
+                "pricing",
+                "nonprofit",
+                "customer-stories",
+                "security",
+                "login",
+                "join"
             )
-            return exceptions.joinToString("|\\b","\\b")
+            return !excludes.contains(githubNickname)
+
         }
+
+//        private fun getRegexExceptions(): String {
+//            val exceptions = arrayOf(
+//                "enterprise", "features", "topics", "collections", "trending", "events", "marketplace", "pricing",
+//                "nonprofit", "customer-stories", "security", "login", "join"
+//            )
+//            return exceptions.joinToString("|\\b","\\b")
+//        }
     }
 }
