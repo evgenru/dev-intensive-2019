@@ -40,7 +40,7 @@ data class Profile(
             if (normalizeUrl.isEmpty())
                 return true
 
-            if (!normalizeUrl.matches("(https://)?(www.)?github.com/[a-z0-9]+(//-[a-z0-9]+)?(/)?".toRegex()))
+            if (!normalizeUrl.matches("(https://)?(www.)?github.com/[a-z0-9]+(-[a-z0-9]+)?(/)?".toRegex()))
                 return false
             val githubNickname = normalizeUrl.substring(repositoryString.indexOf("github.com") + 11).dropLastWhile { it == '/' }
             val excludes = setOf(
