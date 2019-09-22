@@ -1,11 +1,9 @@
 package ru.skillbranch.devintensive.utils
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import ru.skillbranch.devintensive.R
 
@@ -89,4 +87,16 @@ object Utils {
         return bitmap.toDrawable(context.resources)
     }
 
+    fun createCircleDrawable(context: Context, drawable: Drawable):Drawable{
+        val size = drawable.intrinsicWidth
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint().apply {
+            isAntiAlias = true
+            shader = BitmapShader(drawable.toBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        }
+        canvas.drawOval(0f, 0f, size.toFloat(), size.toFloat(), paint)
+        canvas.save()
+        return bitmap.toDrawable(context.resources)
+    }
 }

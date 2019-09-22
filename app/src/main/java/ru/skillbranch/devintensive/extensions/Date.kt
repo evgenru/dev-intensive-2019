@@ -7,7 +7,20 @@ import kotlin.math.absoluteValue
 /**
  * Created by evgen.ru79@gmail.com on 27.06.2019.
  */
-fun Date.format(pattern: String = "HH:mm:ss dd.MM.yy") = SimpleDateFormat(pattern, Locale("ru")).format(this)
+fun Date.format(pattern: String = "HH:mm:ss dd.MM.yy") =
+    SimpleDateFormat(pattern, Locale("ru")).format(this)
+
+
+fun Date.shortFormat(): String? {
+    val patern = if (isSameDay(Date())) "HH:mm" else "dd.MM.yy"
+    val dateFormat = SimpleDateFormat(patern, Locale("ru"))
+    return dateFormat.format(this)
+}
+
+fun Date.isSameDay(date: Date): Boolean {
+    return this.time / TimeUnits.DAY.mills == date.time / TimeUnits.DAY.mills
+}
+
 
 fun Date.add(value: Int, units: TimeUnits): Date {
     return this.apply { time += value * units.mills }
@@ -48,7 +61,10 @@ enum class TimeUnits(val mills: Long) {
 }
 
 
-fun Date.humanizeDiff(date: Date = Date()): String {
+fun Date?.humanizeDiff(date: Date = Date()): String {
+
+    if (this == null)
+        return "???"
 
     val diffTime = (this.time - date.time)
 
