@@ -1,8 +1,9 @@
 package ru.skillbranch.devintensive.viewmodels
 
 import androidx.lifecycle.*
+import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.ChatItem
-import ru.skillbranch.devintensive.models.data.UserItem
+import ru.skillbranch.devintensive.models.data.ChatType
 import ru.skillbranch.devintensive.repositories.ChatRepository
 
 /**
@@ -12,10 +13,26 @@ class MainViewModel : ViewModel() {
     private val chatRepository = ChatRepository
     private val chats: LiveData<List<ChatItem>> =
         Transformations.map(chatRepository.loadChats()) { chat ->
-            return@map chat
+            val result = chat
                 .filter { !it.isArchived }
                 .map { it.toChatItem() }
                 .sortedBy { it.id.toInt() }
+                .toMutableList()
+
+            val archiveChats = chat
+                .filter { it.isArchived }
+
+            if (archiveChats.isNotEmpty()) {
+                val archiveChat = Chat(
+                    ARCHIVE_CHAT_ID,
+                    "",
+                    messages = archiveChats.map { it.messages }.flatten().toMutableList(),
+                    isArchived = true
+                )
+                result.add(0, archiveChat.toChatItem())
+            }
+
+            return@map result
         }
     private val query = MutableLiveData<String>("")
 
@@ -30,8 +47,8 @@ class MainViewModel : ViewModel() {
             else chatList.filter { it.title.contains(queryStr, ignoreCase = true) }
         }
 
-        result.addSource(chats){filterF.invoke()}
-        result.addSource(query){filterF.invoke()}
+        result.addSource(chats) { filterF.invoke() }
+        result.addSource(query) { filterF.invoke() }
 
         return result
     }
@@ -50,5 +67,9 @@ class MainViewModel : ViewModel() {
 
     fun handleSearchQuery(text: String) {
         query.value = text
+    }
+
+    companion object {
+        const val ARCHIVE_CHAT_ID: String = "ARCHIVE_CHAT_ID"
     }
 }

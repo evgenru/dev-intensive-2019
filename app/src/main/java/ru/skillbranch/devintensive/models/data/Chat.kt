@@ -26,7 +26,7 @@ data class Chat(
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageShort(): Pair<String, String?> = when(val lastMessage = messages.lastOrNull()){
+    fun lastMessageShort(): Pair<String, String?> = when (val lastMessage = messages.lastOrNull()) {
         is TextMessage -> (lastMessage.text ?: "") to lastMessage.from.firstName
         is ImageMessage -> "${lastMessage.from.firstName} - отправил фото" to lastMessage.from.firstName
         else -> "" to null
@@ -35,20 +35,33 @@ data class Chat(
     private fun isSingle(): Boolean = members.size == 1
 
     fun toChatItem(): ChatItem {
-        return if (isSingle()) {
-            val user = members.first()
-            ChatItem(
-                id,
-                user.avatar,
-                Utils.toInitials(user.firstName, user.lastName) ?: "??",
-                "${user.firstName ?: ""} ${user.lastName ?: ""}",
+        return when {
+            isArchived -> ChatItem(
+                "",
+                null,
+                "",
+                "",
                 lastMessageShort().first,
                 unreadableMessageCount(),
                 lastMessageDate()?.shortFormat(),
-                user.isOnline
+                false,
+                ChatType.ARCHIVE,
+                lastMessageShort().second
             )
-        } else {
-            ChatItem(
+            isSingle() -> {
+                val user = members.first()
+                ChatItem(
+                    id,
+                    user.avatar,
+                    Utils.toInitials(user.firstName, user.lastName) ?: "??",
+                    "${user.firstName ?: ""} ${user.lastName ?: ""}",
+                    lastMessageShort().first,
+                    unreadableMessageCount(),
+                    lastMessageDate()?.shortFormat(),
+                    user.isOnline
+                )
+            }
+            else -> ChatItem(
                 id,
                 null,
                 "",
@@ -64,7 +77,7 @@ data class Chat(
     }
 }
 
-enum class ChatType{
+enum class ChatType {
     SINGLE,
     GROUP,
     ARCHIVE
