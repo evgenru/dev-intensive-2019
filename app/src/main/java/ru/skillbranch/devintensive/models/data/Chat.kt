@@ -6,6 +6,7 @@ import ru.skillbranch.devintensive.models.BaseMessage
 import ru.skillbranch.devintensive.models.ImageMessage
 import ru.skillbranch.devintensive.models.TextMessage
 import ru.skillbranch.devintensive.utils.Utils
+import ru.skillbranch.devintensive.viewmodels.MainViewModel
 import java.util.*
 
 data class Chat(
@@ -36,7 +37,7 @@ data class Chat(
 
     fun toChatItem(): ChatItem {
         return when {
-            isArchived -> ChatItem(
+            this.id == MainViewModel.ARCHIVE_CHAT_ID -> ChatItem(
                 "",
                 null,
                 "",

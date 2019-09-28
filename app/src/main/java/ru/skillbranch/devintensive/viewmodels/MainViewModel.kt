@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.*
 import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.ChatItem
@@ -9,10 +10,11 @@ import ru.skillbranch.devintensive.repositories.ChatRepository
 /**
  * Created by evgen.ru79@gmail.com on 07.09.2019.
  */
-class MainViewModel : ViewModel() {
-    private val chatRepository = ChatRepository
-    private val chats: LiveData<List<ChatItem>> =
+open class MainViewModel : ViewModel() {
+    protected val chatRepository = ChatRepository
+    protected open val chats: LiveData<List<ChatItem>> =
         Transformations.map(chatRepository.loadChats()) { chat ->
+            Log.d("TEST", "MainViewModel($this): ${chat?.size.toString()}")
             val result = chat
                 .filter { !it.isArchived }
                 .map { it.toChatItem() }
@@ -34,12 +36,14 @@ class MainViewModel : ViewModel() {
 
             return@map result
         }
-    private val query = MutableLiveData<String>("")
+    protected val query = MutableLiveData<String>("")
 
-    fun getCharData(): LiveData<List<ChatItem>> {
+    fun getChatData(): LiveData<List<ChatItem>> {
         val result = MediatorLiveData<List<ChatItem>>()
 
+        Log.d("TEST", "getChatData($this): ${chats.value?.size}")
         val filterF = {
+            Log.d("TEST", "filterF($this): ${chats.value?.size}")
             val queryStr = query.value!!
             val chatList = chats.value!!
 
