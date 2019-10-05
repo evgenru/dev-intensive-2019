@@ -8,9 +8,9 @@ import ru.skillbranch.devintensive.repositories.GroupRepository
  * Created by evgen.ru79@gmail.com on 20.09.2019.
  */
 class GroupViewModel: ViewModel() {
-    private val query = MutableLiveData<String>("")
+    private val query = MutableLiveData<String>().apply{value = ""}
     private val groupRepository = GroupRepository
-    private val userItems = MutableLiveData<List<UserItem>>(loadUsers())
+    private val userItems = MutableLiveData<List<UserItem>>().apply{value = loadUsers()}
     private val selectedItems = Transformations.map(userItems){
         users -> users.filter { it.isSelected }
     }

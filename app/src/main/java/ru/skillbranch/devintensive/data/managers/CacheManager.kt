@@ -6,8 +6,8 @@ import ru.skillbranch.devintensive.models.data.User
 import ru.skillbranch.devintensive.utils.DataGenerator
 
 object CacheManager {
-    private val chats = MutableLiveData<List<Chat>>(DataGenerator.stabChats)
-    private val users = MutableLiveData<List<User>>(DataGenerator.stabUsers)
+    private val chats = MutableLiveData<List<Chat>>().apply { value = DataGenerator.stabChats }
+    private val users = MutableLiveData<List<User>>().apply { value =  DataGenerator.stabUsers }
 
     fun loadChats(): MutableLiveData<List<Chat>> {
         return chats

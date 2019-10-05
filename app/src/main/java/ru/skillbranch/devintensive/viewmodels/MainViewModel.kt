@@ -36,7 +36,7 @@ open class MainViewModel : ViewModel() {
 
             return@map result
         }
-    protected val query = MutableLiveData<String>("")
+    protected val query = MutableLiveData<String>().apply { value = "" }
 
     fun getChatData(): LiveData<List<ChatItem>> {
         val result = MediatorLiveData<List<ChatItem>>()
