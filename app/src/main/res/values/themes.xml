@@ -12,8 +12,22 @@
         <item name="colorIcon">@color/color_gray</item>
         <item name="colorDivider">@color/color_divider_dark</item>
 
+
+
+        <item name="colorItem">@android:color/white</item>
+        <item name="colorPrimaryText">@color/color_primary</item>
+        <item name="colorSecondaryText">@color/color_primary_light</item>
+        <item name="colorCounter">@color/color_indicator</item>
+        <item name="colorIndicator">@color/color_green</item>
+        <item name="colorArchiveIcon">@color/color_gray</item>
+        <item name="colorItemSwipeBackground">@android:color/white</item>
+        <item name="colorItemSwipeUnderground">@color/color_primary_dark</item>
+
+
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowAnimationStyle">@style/ActivityTransitions</item>
+
+        <item name="android:itemBackground">@android:color/white</item>
 
     </style>
 

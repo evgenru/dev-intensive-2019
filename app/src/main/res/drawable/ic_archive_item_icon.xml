@@ -4,7 +4,7 @@
         <layer-list>
             <item android:width="@dimen/avatar_item_size" android:height="@dimen/avatar_item_size">
                 <shape android:shape="oval">
-                    <solid android:color="@color/color_gray" />
+                    <solid android:color="?attr/colorArchiveIcon" />
                 </shape>
             </item>
             <item android:width="24dp" android:height="24dp" android:drawable="@drawable/ic_archive_black_24dp" android:gravity="center" />

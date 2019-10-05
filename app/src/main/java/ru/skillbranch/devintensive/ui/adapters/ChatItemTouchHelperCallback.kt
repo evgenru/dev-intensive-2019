@@ -1,9 +1,6 @@
 package ru.skillbranch.devintensive.ui.adapters
 
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -14,6 +11,13 @@ import ru.skillbranch.devintensive.models.data.ChatItem
 /**
  * Created by evgen.ru79@gmail.com on 08.09.2019.
  */
+
+class ArchiveChatItemTouchHelperCallback(    private val adapter: ChatAdapter,
+                                             private val swipeListener: (ChatItem) -> Unit
+): ChatItemTouchHelperCallback(adapter, swipeListener){
+    override fun getIconRes(): Int = R.drawable.ic_unarchive_black_24dp
+}
+
 open class ChatItemTouchHelperCallback(
     private val adapter: ChatAdapter,
     private val swipeListener: (ChatItem) -> Unit
@@ -108,7 +112,8 @@ open class ChatItemTouchHelperCallback(
         }
 
         with(bgPaint){
-            color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
+            val attrs = itemView.context.theme.obtainStyledAttributes(intArrayOf(R.attr.colorItemSwipeUnderground))
+            color = attrs.getColor(0, Color.BLACK)
         }
 
         canvas.drawRect(bgRect, bgPaint)

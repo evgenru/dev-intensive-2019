@@ -70,15 +70,20 @@ class ChatAdapter(private val listener: (ChatItem) -> Unit) :
         abstract fun bind(item: ChatItem, listener: (ChatItem) -> Unit)
     }
 
-    inner class SingleViewHolder(convertView: View) : ChatItemViewHolder(convertView),
+    abstract inner class SwipedChatItemViewHolder(convertView: View) : ChatItemViewHolder(convertView),
         ItemTouchViewHolder {
         override fun onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY)
+            val attrs = itemView.context.theme.obtainStyledAttributes(intArrayOf(R.attr.colorItemSwipeBackground))
+            itemView.setBackgroundColor(attrs.getColor(0, Color.LTGRAY))
         }
 
         override fun onItemCleared() {
-            itemView.setBackgroundColor(Color.WHITE)
+            val attrs = itemView.context.theme.obtainStyledAttributes(intArrayOf(R.attr.colorItem))
+            itemView.setBackgroundColor(attrs.getColor(0, Color.WHITE))
         }
+    }
+
+    inner class SingleViewHolder(convertView: View) : SwipedChatItemViewHolder(convertView) {
 
         override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             if (item.avatar == null) {
@@ -113,16 +118,7 @@ class ChatAdapter(private val listener: (ChatItem) -> Unit) :
 
     }
 
-    inner class GroupViewHolder(convertView: View) : ChatItemViewHolder(convertView),
-        ItemTouchViewHolder {
-        override fun onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY)
-        }
-
-        override fun onItemCleared() {
-            itemView.setBackgroundColor(Color.WHITE)
-        }
-
+    inner class GroupViewHolder(convertView: View) : SwipedChatItemViewHolder(convertView) {
         override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             iv_avatar_group.setImageDrawable(
                 Utils.createAvatar(

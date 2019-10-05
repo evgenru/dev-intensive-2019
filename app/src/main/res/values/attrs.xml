@@ -8,6 +8,15 @@
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>
 
+    <attr name="colorItem" format="reference"/>
+    <attr name="colorPrimaryText" format="reference"/>
+    <attr name="colorSecondaryText" format="reference"/>
+    <attr name="colorCounter" format="reference"/>
+    <attr name="colorIndicator" format="reference"/>
+    <attr name="colorArchiveIcon" format="reference"/>
+    <attr name="colorItemSwipeBackground" format="reference"/>
+    <attr name="colorItemSwipeUnderground" format="reference"/>
+
     <declare-styleable name="CircleImageView">
         <attr name="cv_borderColor" format="color"/>
         <attr name="cv_borderWidth" format="dimension"/>
