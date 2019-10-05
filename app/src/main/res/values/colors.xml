@@ -8,6 +8,8 @@
     <color name="color_primary_dark_night">#000000</color>
     <color name="color_primary_light_night">#1D1D1D</color>
 
+    <color name="color_background_night">#121212</color>
+
     <color name="color_accent">#FC4C4C</color>
     <color name="color_accent_night">#2196F3</color>
     <color name="color_accent_secondary">#BEAC32EE</color>

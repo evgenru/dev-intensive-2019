@@ -22,7 +22,13 @@
         <item name="colorItemSwipeBackground">@color/color_primary_light_night</item>
         <item name="colorItemSwipeUnderground">@color/color_accent_night</item>
 
+        <item name="colorChipGroup">@android:color/white</item>
+        <item name="colorChip">@color/color_primary_light_night</item>
+        <item name="colorChipClose">@color/color_gray</item>
 
+
+        <item name="android:itemBackground">@android:color/white</item>
+        <item name="android:colorBackground">@color/color_background_night</item>
 
 
         <item name="android:windowActivityTransitions">true</item>

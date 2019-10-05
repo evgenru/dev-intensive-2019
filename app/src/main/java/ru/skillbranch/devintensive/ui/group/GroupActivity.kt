@@ -30,6 +30,8 @@ class GroupActivity : AppCompatActivity() {
 
     private lateinit var userAdapter: UserAdapter
     private lateinit var viewModel: GroupViewModel
+    private var chipColor: Int = 0
+    private var chipCloseColor: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +91,10 @@ class GroupActivity : AppCompatActivity() {
             finish()
             overridePendingTransition(R.anim.idle, R.anim.botton_down)
         }
+
+        val attrs = this.theme.obtainStyledAttributes(intArrayOf(R.attr.colorChip, R.attr.colorChipClose))
+        chipColor = attrs.getColor(0, getColor(R.color.color_primary_light))
+        chipCloseColor = attrs.getColor(1, getColor(R.color.color_gray_light))
     }
 
     private fun initViewModel() {
@@ -112,8 +118,8 @@ class GroupActivity : AppCompatActivity() {
             isCloseIconVisible = true
             tag = user.id
             isClickable = true
-            closeIconTint = ColorStateList.valueOf(Color.WHITE)
-            chipBackgroundColor = ColorStateList.valueOf(getColor(R.color.color_primary_light))
+            closeIconTint = ColorStateList.valueOf(chipCloseColor)
+            chipBackgroundColor = ColorStateList.valueOf(chipColor)
             setTextColor(Color.WHITE)
         }
         chip.setOnCloseIconClickListener { viewModel.handleRemoveChip(it.tag.toString()) }
