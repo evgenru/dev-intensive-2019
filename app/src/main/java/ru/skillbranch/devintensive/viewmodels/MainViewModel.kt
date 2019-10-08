@@ -27,7 +27,7 @@ open class MainViewModel : ViewModel() {
             if (archiveChats.isNotEmpty()) {
                 val archiveChat = Chat(
                     ARCHIVE_CHAT_ID,
-                    "",
+                    "Архив чатов",
                     messages = archiveChats.map { it.messages }.flatten().toMutableList(),
                     isArchived = true
                 )
