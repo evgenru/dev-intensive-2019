@@ -41,7 +41,7 @@ data class Chat(
                 "",
                 null,
                 "",
-                "",
+                title,
                 lastMessageShort().first,
                 unreadableMessageCount(),
                 lastMessageDate()?.shortFormat(),
